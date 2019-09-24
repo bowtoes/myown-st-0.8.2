@@ -1051,7 +1051,10 @@ xloadsparefonts(void)
     /* Allocate memory for cache entries. */
     if (frccap < 4 * fc) {
         frccap += 4 * fc - frccap;
-        frc = xrealloc(frc, frccap * sizeof(Fontcache));
+        // For some reason gcc doesn't like assigning frc to this
+        // and the same goes on line 1392
+        // I have no idea why
+        xrealloc(frc, frccap * sizeof(Fontcache));
     }
 
     for (fp = font2; fp - font2 < fc; ++fp) {
@@ -1389,7 +1392,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
             /* Allocate memory for the new cache entry. */
             if (frclen >= frccap) {
                 frccap += 16;
-                frc = xrealloc(frc, frccap * sizeof(Fontcache));
+                xrealloc(frc, frccap * sizeof(Fontcache));
             }
 
             /*
